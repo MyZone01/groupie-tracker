@@ -4,10 +4,10 @@
 
 {{ define "content" }}
 
-<main>
+<article>
     <h1>{{.Name}}</h1>
-    <article>
-        <div class="glass">
+    <div class="info-artist">
+        <div class="artist-glass">
             <img src="{{.Image}}" alt="{{.Name}}" />
             <h2>{{.Name}}</h2>
             <div class="tags">
@@ -21,24 +21,24 @@
                 {{end}}
             </div>
         </div>
-        <div class="glass">
+        <div class="artist-glass">
             <h3>Concert Dates</h3>
             <div class="tags">
                 {{range .Relation}}
-                    <p class="tag">{{.Country}} - {{.City}}</p>
+                <p class="tag">{{.Country}} - {{.City}}</p>
                 {{end}}
             </div>
         </div>
-        <div class="glass">
+        <div class="artist-glass">
             <h3>Concert Locations</h3>
             <div class="tags">
                 {{range .Relation}}
                 {{range .Dates}}
-                    <p class="tag">{{.}}</p>
+                <p class="tag">{{.}}</p>
                 {{end}}
                 {{end}}
             </div>
         </div>
-    </article>
-</main>
+    </div>
+</article>
 {{ end }}
