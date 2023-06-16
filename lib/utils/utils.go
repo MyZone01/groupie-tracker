@@ -2,6 +2,7 @@ package groupie_tracker
 
 import (
 	"fmt"
+	models "groupie_tracker/lib/models"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -52,4 +53,19 @@ func RenderPage(pagePath string, data any, res http.ResponseWriter) {
 	} else {
 		tpl.Execute(res, data)
 	}
+}
+
+func FormatLocations(_relation models.RelationModel) []models.Location {
+	locations := []models.Location{}
+	for _locations, _dates := range _relation.DatesLocations {
+		__locations := strings.Split(_locations, "-")
+		var l models.Location
+		if len(__locations) == 2 {
+			l.City = strings.Title(strings.ReplaceAll(__locations[0], "_", " "))
+			l.Country = strings.Title(strings.ReplaceAll(__locations[1], "_", " "))
+		}
+		l.Dates = _dates
+		locations = append(locations, l)
+	}
+	return locations
 }

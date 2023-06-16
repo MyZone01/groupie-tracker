@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	models "groupie_tracker/lib/models"
 	utils "groupie_tracker/lib/utils"
-	"strings"
 
 	"log"
 	"net/http"
@@ -38,17 +37,7 @@ func ArtistInfos(res http.ResponseWriter, req *http.Request) {
 		var _relation models.RelationModel
 		json.Unmarshal(data, &_relation)
 
-		locations := []models.Location{}
-		for _locations, _dates := range _relation.DatesLocations {
-			__locations := strings.Split(_locations, "-")
-			var l models.Location
-			if len(__locations) == 2 {
-				l.City = strings.Title(strings.ReplaceAll(__locations[0], "_", " "))
-				l.Country = strings.Title(strings.ReplaceAll(__locations[1], "_", " "))
-			}
-			l.Dates = _dates
-			locations = append(locations, l)
-		}
+		locations := utils.FormatLocations(_relation)
 
 		artist.Relation = locations
 
