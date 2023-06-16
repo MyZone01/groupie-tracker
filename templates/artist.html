@@ -1,0 +1,42 @@
+{{define "title"}} | {{ .Name }} {{end}}
+
+{{define "artist"}} <span>{{ .Name }}</span> {{end}}
+
+{{ define "content" }}
+
+<main>
+    <h1>{{.Name}}</h1>
+    <article>
+        <div class="glass">
+            <img src="{{.Image}}" alt="{{.Name}}" />
+            <h2>{{.Name}}</h2>
+            <div class="tags">
+                <p class="tag">Created at: {{.CreationDate}}</p>
+                <p class="tag">First Album: {{.FirstAlbum}}</p>
+            </div>
+            <h3>Members</h3>
+            <div class="tags">
+                {{range .Members}}
+                <p class="tag">{{.}}</p>
+                {{end}}
+            </div>
+        </div>
+        <div class="glass">
+            <h3>Concert Dates</h3>
+            <div class="tags">
+                {{range $date, $location := .Relation.DatesLocations}}
+                    <p class="tag">{{$date}}</p>
+                {{end}}
+            </div>
+        </div>
+        <div class="glass">
+            <h3>Concert Locations</h3>
+            <div class="tags">
+                {{range $date, $location := .Relation.DatesLocations}}
+                    <p class="tag">{{$location}}</p>
+                {{end}}
+            </div>
+        </div>
+    </article>
+</main>
+{{ end }}
