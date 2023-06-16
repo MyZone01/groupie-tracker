@@ -31,6 +31,7 @@ func ArtistInfos(res http.ResponseWriter, req *http.Request) {
 		data1 := utils.GetAPI(artistURL)
 		var artist models.ArtistModel
 		json.Unmarshal(data1, &artist)
+		artist.FirstAlbum = utils.FormatDates(artist.FirstAlbum)
 
 		relationURL := "https://groupietrackers.herokuapp.com/api/relation/" + idArtist
 		data := utils.GetAPI(relationURL)
