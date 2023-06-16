@@ -1,15 +1,23 @@
 package main
 
 import (
+	"fmt"
 	handlers "groupie_tracker/lib/handlers"
+	utils "groupie_tracker/lib/utils"
 	"log"
 	"net/http"
+	"os"
 )
 
-const ADDRESS = "http://localhost"
-const PORT = ":8080"
-
 func main() {
+
+	utils.LoadEnv(".env")
+
+	port := os.Getenv("PORT")
+	PORT := fmt.Sprintf(":%v", port)
+
+	ADDRESS := os.Getenv("ADRESS")
+
 	fs := http.FileServer(http.Dir("assets"))
 	http.Handle("/assets/", http.StripPrefix("/assets/", fs))
 
