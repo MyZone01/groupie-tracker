@@ -2,15 +2,14 @@ package main
 
 import (
 	"fmt"
-	handlers "groupie_tracker/lib/handlers"
-	utils "groupie_tracker/lib/utils"
+	handlers "groupietracker/lib/handlers"
+	utils "groupietracker/lib/utils"
 	"log"
 	"net/http"
 	"os"
 )
 
 func main() {
-
 	utils.LoadEnv(".env")
 
 	port := os.Getenv("PORT")

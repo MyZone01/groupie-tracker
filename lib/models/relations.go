@@ -1,4 +1,4 @@
-package groupie_tracker
+package groupietracker
 
 type RelationModel struct {
 	DatesLocations map[string][]string `json:"datesLocations"`

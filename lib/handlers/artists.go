@@ -1,9 +1,9 @@
-package groupie_tracker
+package groupietracker
 
 import (
 	"encoding/json"
-	models "groupie_tracker/lib/models"
-	utils "groupie_tracker/lib/utils"
+	models "groupietracker/lib/models"
+	utils "groupietracker/lib/utils"
 
 	"log"
 	"net/http"
@@ -18,6 +18,7 @@ func ArtistList(res http.ResponseWriter, req *http.Request) {
 		json.Unmarshal(data, &artists)
 
 		pagePath := "artistsList"
+		res.WriteHeader(http.StatusOK)
 		utils.RenderPage(pagePath, &artists, res)
 		log.Println("✅ All artists get with success")
 	}
@@ -31,19 +32,25 @@ func ArtistInfos(res http.ResponseWriter, req *http.Request) {
 		data1 := utils.GetAPI(artistURL)
 		var artist models.ArtistModel
 		json.Unmarshal(data1, &artist)
-		artist.FirstAlbum = utils.FormatDates(artist.FirstAlbum)
+		if artist.Id != 0 {
+			artist.FirstAlbum = utils.FormatDates(artist.FirstAlbum)
 
-		relationURL := "https://groupietrackers.herokuapp.com/api/relation/" + idArtist
-		data := utils.GetAPI(relationURL)
-		var _relation models.RelationModel
-		json.Unmarshal(data, &_relation)
+			relationURL := "https://groupietrackers.herokuapp.com/api/relation/" + idArtist
+			data := utils.GetAPI(relationURL)
+			var _relation models.RelationModel
+			json.Unmarshal(data, &_relation)
 
-		locations := utils.FormatLocations(_relation)
+			locations := utils.FormatLocations(_relation)
 
-		artist.Relation = locations
+			artist.Relation = locations
 
-		pagePath := "artist"
-		utils.RenderPage(pagePath, &artist, res)
-		log.Println("✅ Artist " + artist.Name + " infos get with success")
+			pagePath := "artist"
+			res.WriteHeader(http.StatusOK)
+			utils.RenderPage(pagePath, &artist, res)
+			log.Println("✅ Artist " + artist.Name + " infos get with success")
+		} else {
+			res.WriteHeader(http.StatusNotFound)
+			utils.RenderPage("404", nil, res)
+		}
 	}
 }

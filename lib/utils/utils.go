@@ -1,9 +1,9 @@
-package groupie_tracker
+package groupietracker
 
 import (
 	"bufio"
 	"fmt"
-	models "groupie_tracker/lib/models"
+	models "groupietracker/lib/models"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -37,11 +37,11 @@ func ValidateRequest(req *http.Request, res http.ResponseWriter, url, method str
 func GetAPI(url string) []byte {
 	response, err := http.Get(url)
 	if err != nil {
-		log.Println("🚨" + err.Error())
+		log.Println("🚨 " + err.Error())
 	}
 	data, err := ioutil.ReadAll(response.Body)
 	if err != nil {
-		log.Println("🚨" + err.Error())
+		log.Println("🚨 " + err.Error())
 	}
 	defer response.Body.Close()
 	return data
@@ -51,7 +51,7 @@ func RenderPage(pagePath string, data any, res http.ResponseWriter) {
 	files := []string{"templates/base.html", "templates/" + pagePath + ".html"}
 	tpl, err := template.ParseFiles(files...)
 	if err != nil {
-		log.Println("🚨" + err.Error())
+		log.Println("🚨 " + err.Error())
 	} else {
 		tpl.Execute(res, data)
 	}
@@ -78,7 +78,7 @@ func FormatLocations(_relation models.RelationModel) []models.Location {
 func LoadEnv(path string) error {
 	file, err := os.Open(path)
 	if err != nil {
-		log.Println("🚨" + err.Error())
+		log.Println("🚨 " + err.Error())
 	}
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
@@ -93,7 +93,7 @@ func LoadEnv(path string) error {
 	}
 	return scanner.Err()
 }
-	
+
 func FormatDates(date string) string {
 	months := map[string]string{
 		"01": "January",
@@ -110,5 +110,9 @@ func FormatDates(date string) string {
 		"12": "December",
 	}
 	_date := strings.Split(date, "-")
-	return fmt.Sprintf("%s %s %s", _date[0], months[_date[1]], _date[2])
+	if len(_date) == 3 {
+		return fmt.Sprintf("%s %s %s", _date[0], months[_date[1]], _date[2])
+	} else {
+		return ""
+	}
 }

@@ -1,4 +1,4 @@
-package groupie_tracker
+package groupietracker
 
 type ArtistModel struct {
 	Id           int      `json:"id"`

@@ -1,7 +1,7 @@
-package groupie_tracker
+package groupietracker
 
 import (
-	utils "groupie_tracker/lib/utils"
+	utils "groupietracker/lib/utils"
 	"log"
 	"net/http"
 )
@@ -9,6 +9,7 @@ import (
 func Index(res http.ResponseWriter, req *http.Request) {
 	if utils.ValidateRequest(req, res, "/", http.MethodGet) {
 		pagePath := "index"
+		res.WriteHeader(http.StatusOK)
 		utils.RenderPage(pagePath, nil, res)
 		log.Println("✅ Home page get with success")
 	}
