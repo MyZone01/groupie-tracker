@@ -8,5 +8,5 @@ type ArtistModel struct {
 	CreationDate int      `json:"creationDate"`
 	FirstAlbum   string   `json:"firstAlbum"`
 	City         string
-	Relation     RelationModel
+	Relation     []Location
 }

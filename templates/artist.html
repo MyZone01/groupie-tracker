@@ -24,16 +24,16 @@
         <div class="glass">
             <h3>Concert Dates</h3>
             <div class="tags">
-                {{range $date, $location := .Relation.DatesLocations}}
-                    <p class="tag">{{$date}}</p>
+                {{range .Relation}}
+                    <p class="tag">{{.City}} - {{.Country}}</p>
                 {{end}}
             </div>
         </div>
         <div class="glass">
             <h3>Concert Locations</h3>
             <div class="tags">
-                {{range $date, $location := .Relation.DatesLocations}}
-                    <p class="tag">{{$location}}</p>
+                {{range .Relation}}
+                    <p class="tag">{{.}}</p>
                 {{end}}
             </div>
         </div>
