@@ -64,8 +64,30 @@ func FormatLocations(_relation models.RelationModel) []models.Location {
 			l.City = strings.Title(strings.ReplaceAll(__locations[0], "_", " "))
 			l.Country = strings.Title(strings.ReplaceAll(__locations[1], "_", " "))
 		}
-		l.Dates = _dates
+		l.Dates = FormatDates(_dates)
 		locations = append(locations, l)
 	}
 	return locations
+}
+
+func FormatDates(dates []string) []string {
+	months := map[string]string{
+		"01": "January",
+		"02": "February",
+		"03": "March",
+		"04": "April",
+		"05": "May",
+		"06": "June",
+		"07": "July",
+		"08": "August",
+		"09": "September",
+		"10": "October",
+		"11": "November",
+		"12": "December",
+	}
+	for i, date := range dates {
+		_date := strings.Split(date, "-")
+		dates[i] = fmt.Sprintf("%s %s %s", _date[0], months[_date[1]], _date[2]) 
+	}
+	return dates
 }

@@ -25,7 +25,7 @@
             <h3>Concert Dates</h3>
             <div class="tags">
                 {{range .Relation}}
-                    <p class="tag">{{.City}} - {{.Country}}</p>
+                    <p class="tag">{{.Country}} - {{.City}}</p>
                 {{end}}
             </div>
         </div>
@@ -33,7 +33,9 @@
             <h3>Concert Locations</h3>
             <div class="tags">
                 {{range .Relation}}
+                {{range .Dates}}
                     <p class="tag">{{.}}</p>
+                {{end}}
                 {{end}}
             </div>
         </div>
