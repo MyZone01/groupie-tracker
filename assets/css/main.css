@@ -1,4 +1,4 @@
-@font-face {
+/* @font-face {
     font-family: 'Taller';
     src: url('../assets/fonts/taller.ttf') format('truetype');
     font-weight: normal;
@@ -161,4 +161,4 @@ footer span.heart {
     margin: 0rem 0.25rem;
     transform-origin: center;
     animation: beat 1s infinite alternate;
-}
+} */
