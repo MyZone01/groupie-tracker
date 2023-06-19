@@ -149,23 +149,18 @@ h1 {
     color: white;
     font-weight: bold;
     line-height: 1.5;
-    font-size: 60vh;
+    font-size: 75vh;
     letter-spacing: 2.5rem;
     font-family: 'Taller', sans-serif;
     -webkit-background-clip: text;
     background-clip: text;
     background-position: center center;
     background-size: contain;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
     text-transform: uppercase;
     background-image: url('/assets/img/background.jpg');
     color: transparent;
-    z-index: -1000;
+    z-index: -1;
     white-space: nowrap;
-    overflow: scroll;
 }
 
 h1.spacy {
@@ -262,18 +257,6 @@ article.glass {
     margin-bottom: 1.25rem;
 }
 
-h2 {
-    font-size: 30px;
-    padding-bottom: 30px;
-    color: white;
-}
-
-h3 {
-    font-size: 25px;
-    padding-bottom: 200px;
-    color: #ffffff;
-}
-
 .tag {
     box-shadow: rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
     padding: 0.3rem .75rem;
@@ -282,39 +265,6 @@ h3 {
     color: white;
     background-color: black;
     border-radius: 2rem;
-}
-
-.info-artist {
-    background: transparent;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    border-radius: 30px;
-    width: 90vw;
-    height: 90vh;
-    overflow: scroll;
-}
-
-.artist-glass img {
-    width: 250px;
-    border-radius: 50%;
-    margin-bottom: 20px;
-}
-
-.artist-glass {
-    display: flex;
-    flex-direction: column;
-    background-color: #00000035;
-    justify-content: center;
-    align-items: center;
-    min-height: 68vh;
-    width: 500px;
-    padding: 20px;
-    margin: 20px;
-    border-radius: 30px;
-    box-shadow: rgba(0, 0, 0, 0.15) 0px 15px 25px, rgba(0, 0, 0, 0.05) 0px 5px 10px;
-    backdrop-filter: blur(5px);
 }
 
 footer {
@@ -363,17 +313,3 @@ footer span.heart {
     transform-origin: center;
     animation: beat 1s infinite alternate;
 }
-
-/* @media screen and (min-width: 1118px) {
-    h1 {
-        left: 15%;
-    }
-} */
-
-/*
-@media screen and (max-width: 480px) {
-    .glass {
-        width: 95vw;
-        padding: 0.5rem;
-    }
-} */
