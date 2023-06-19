@@ -1,0 +1,15 @@
+GET https://groupietrackers.herokuapp.com/api/artists HTTP/1.1
+
+###
+
+GET https://groupietrackers.herokuapp.com/api/locations HTTP/1.1
+
+###
+
+GET https://groupietrackers.herokuapp.com/api/dates HTTP/1.1
+
+###
+
+GET https://groupietrackers.herokuapp.com/api/relation HTTP/1.1
+
+###
