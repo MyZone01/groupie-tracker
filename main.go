@@ -9,13 +9,13 @@ import (
 	"os"
 )
 
-func main() {
+func _main() {
 	utils.LoadEnv(".env")
 
 	port := os.Getenv("PORT")
 	PORT := fmt.Sprintf(":%v", port)
 
-	ADDRESS := os.Getenv("ADRESS")
+	ADDRESS := os.Getenv("ADDRESS")
 
 	fs := http.FileServer(http.Dir("assets"))
 	http.Handle("/assets/", http.StripPrefix("/assets/", fs))
