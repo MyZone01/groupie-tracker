@@ -9,7 +9,7 @@ import (
 	"os"
 )
 
-func _main() {
+func main() {
 	utils.LoadEnv(".env")
 
 	port := os.Getenv("PORT")
@@ -23,6 +23,7 @@ func _main() {
 	http.HandleFunc("/", handlers.Index)
 	http.HandleFunc("/artists/", handlers.ArtistList)
 	http.HandleFunc("/artist/", handlers.ArtistInfos)
+	http.HandleFunc("/map/", handlers.Map)
 
 	log.Println("Server started and listening on", PORT)
 	log.Println(ADDRESS + PORT)

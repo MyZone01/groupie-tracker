@@ -1,0 +1,69 @@
+{{define "title"}} | Map{{end}}
+
+{{define "artist"}} {{end}}
+
+{{define "content"}}
+<main>
+    <h1 class="spacy">GROUPIE</h1>
+    <style>
+        .container {
+            display: grid;
+            width: 100vw;
+            grid-template-columns: repeat(55, 1fr);
+            grid-template-rows: repeat(35, 1fr);
+            counter-reset: cell-counter;
+        }
+
+        .container::before {
+            position: absolute;
+            content: "";
+            top: 0;
+            left: 0;
+            display: block;
+            width: 100vw;
+            height: 100vh;
+            background-color: #0000006b;
+        }
+
+        .cell {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1em;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+        }
+
+        /* .cell::before {
+            counter-increment: cell-counter;
+            content: counter(cell-counter);
+        } */
+    </style>
+    <div class="container">
+        {{range . }}
+        {{ if (eq . "NorthAmerica") }}
+        <div class="cell" style="background-image: radial-gradient( circle 897px at 9% 80.3%,  rgba(55,60,245,1) 0%, white 100.2% ); z-index: 5; cursor: pointer;"></div>
+        {{- end}}
+        {{ if (eq . "SouthAmerica") }}
+        <div class="cell" style="background-image: radial-gradient( circle 897px at 9% 80.3%,  rgba(55,60,245,1) 0%, white 100.2% ); z-index: 5; cursor: pointer;"></div>
+        {{- end}}
+        {{ if (eq . "Africa") }}
+        <div class="cell" style="background-image: radial-gradient( circle 897px at 9% 80.3%,  rgba(55,60,245,1) 0%, white 100.2% ); z-index: 5; cursor: pointer;"></div>
+        {{- end}}
+        {{ if (eq . "Asia") }}
+        <div class="cell" style="background-image: radial-gradient( circle 897px at 9% 80.3%,  rgba(55,60,245,1) 0%, white 100.2% ); z-index: 5; cursor: pointer;"></div>
+        {{- end}}
+        {{ if (eq . "Europe") }}
+        <div class="cell" style="background-image: radial-gradient( circle 897px at 9% 80.3%,  rgba(55,60,245,1) 0%, white 100.2% ); z-index: 5; cursor: pointer;"></div>
+        {{- end}}
+        {{ if (eq . "Oceania") }}
+        <div class="cell" style="background-image: radial-gradient( circle 897px at 9% 80.3%,  rgba(55,60,245,1) 0%, white 100.2% ); z-index: 5; cursor: pointer;"></div>
+        {{- end}}
+        {{ if (eq . "") }}
+        <div class="cell"></div>
+        {{- end}}
+        {{- end}}
+    </d>
+</main>
+{{end}}
