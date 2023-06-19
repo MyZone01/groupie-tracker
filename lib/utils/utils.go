@@ -34,17 +34,20 @@ func ValidateRequest(req *http.Request, res http.ResponseWriter, url, method str
 	return true
 }
 
-func GetAPI(url string) []byte {
+func GetAPI(url string) ([]byte, error) {
 	response, err := http.Get(url)
 	if err != nil {
-		log.Println("🚨 " + err.Error())
-	}
-	data, err := ioutil.ReadAll(response.Body)
-	if err != nil {
-		log.Println("🚨 " + err.Error())
+		log.Println("Failed to make API Request:", err.Error())
+		return nil, err
 	}
 	defer response.Body.Close()
-	return data
+	data, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		log.Println("🚨 Failed to read API response body:", err.Error())
+		return nil, err
+	}
+
+	return data, nil
 }
 
 func RenderPage(pagePath string, data any, res http.ResponseWriter) {
@@ -116,3 +119,4 @@ func FormatDates(date string) string {
 		return ""
 	}
 }
+
