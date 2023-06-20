@@ -4,7 +4,7 @@ type RelationModel struct {
 	DatesLocations map[string][]string `json:"datesLocations"`
 }
 
-type Location struct {
+type Event struct {
 	City    string
 	Country string
 	Dates   []string

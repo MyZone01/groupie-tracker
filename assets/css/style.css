@@ -39,11 +39,15 @@
 }
 
 *::-webkit-scrollbar-track:hover {
-    background-color: transparent;
+    background-color: white;
 }
 
 *::-webkit-scrollbar-thumb {
     background-color: #1f3cbc;
+}
+
+*::-webkit-scrollbar-corner {
+    background-color: transparent;
 }
 
 *::-webkit-scrollbar-thumb:hover {
@@ -92,11 +96,11 @@ header input {
     margin-right: 0.5rem;
     width: clamp(115px, 50vw, 365px);
     border: none;
-    background-color: #ffffff95;
+    background-color: white;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
 }
 
-header button {
+button {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -105,15 +109,23 @@ header button {
     height: 35px;
     border: none;
     color: black;
-    background-color: #ffffff95;
+    background-color: white;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
     cursor: pointer;
+}
+
+header button,
+header input {
+    background-color: #ffffff95;
 }
 
 i {
     display: block;
     width: 20px;
     height: 20px;
+}
+
+.search button i {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M11 2C15.968 2 20 6.032 20 11C20 15.968 15.968 20 11 20C6.032 20 2 15.968 2 11C2 6.032 6.032 2 11 2ZM11 18C14.8675 18 18 14.8675 18 11C18 7.1325 14.8675 4 11 4C7.1325 4 4 7.1325 4 11C4 14.8675 7.1325 18 11 18ZM19.4853 18.0711L22.3137 20.8995L20.8995 22.3137L18.0711 19.4853L19.4853 18.0711Z'%3E%3C/path%3E%3C/svg%3E");
 }
 
@@ -175,7 +187,7 @@ h1.spacy {
     flex-wrap: wrap;
     width: 100%;
     height: 100vh;
-    padding:  10vh 1rem;
+    padding: 10vh 1rem;
     overflow-x: hidden;
     overflow-y: scroll;
 }
@@ -251,6 +263,7 @@ article.glass {
 }
 
 .tag {
+    cursor: pointer;
     box-shadow: rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
     padding: 0.3rem .75rem;
     margin-right: 1.25rem;
@@ -366,4 +379,42 @@ footer span.heart {
     margin: 0rem 0.25rem;
     transform-origin: center;
     animation: beat 1s infinite alternate;
+}
+
+@keyframes glowing {
+    from {
+        box-shadow: 0 0 0 white;
+    }
+
+    to {
+        transform: scale(1.01);
+        box-shadow: 0 0 5px 2px white;
+    }
+}
+
+.tag.place:hover,
+.tag.date:hover {
+    background-color: #1538d4;
+}
+
+.glowing.tag,
+.glowing>.tag {
+    background-color: #1538d4;
+    position: relative;
+}
+
+.glowing.tag::before,
+.glowing>.tag::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: white;
+    transition: 0.5s;
+    z-index: -1;
+    opacity: 0.25;
+    border-radius: 2rem;
+    animation: glowing .75s ease-in-out infinite alternate;
 }

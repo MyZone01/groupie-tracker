@@ -66,11 +66,11 @@ func RenderPage(pagePath string, data any, res http.ResponseWriter) {
 	}
 }
 
-func FormatLocations(_relation models.RelationModel) []models.Location {
-	locations := []models.Location{}
+func FormatLocations(_relation models.RelationModel) []models.Event {
+	locations := []models.Event{}
 	for _locations, _dates := range _relation.DatesLocations {
 		__locations := strings.Split(_locations, "-")
-		var l models.Location
+		var l models.Event
 		if len(__locations) == 2 {
 			l.City = strings.Title(strings.ReplaceAll(__locations[0], "_", " "))
 			l.Country = strings.Title(strings.ReplaceAll(__locations[1], "_", " "))
