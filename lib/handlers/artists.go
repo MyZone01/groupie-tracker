@@ -28,7 +28,6 @@ func ArtistList(res http.ResponseWriter, req *http.Request) {
 		}
 
 		pagePath := "artistsList"
-		res.WriteHeader(http.StatusOK)
 		utils.RenderPage(pagePath, &artists, res)
 		log.Println("✅ All artists get with success")
 	}
@@ -74,7 +73,6 @@ func ArtistInfos(res http.ResponseWriter, req *http.Request) {
 			artist.Relation = locations
 
 			pagePath := "artist"
-			res.WriteHeader(http.StatusOK)
 			utils.RenderPage(pagePath, &artist, res)
 			log.Println("✅ Artist " + artist.Name + " infos get with success")
 		} else {

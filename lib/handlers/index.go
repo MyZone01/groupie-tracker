@@ -9,7 +9,6 @@ import (
 func Index(res http.ResponseWriter, req *http.Request) {
 	if utils.ValidateRequest(req, res, "/", http.MethodGet) {
 		pagePath := "index"
-		res.WriteHeader(http.StatusOK)
 		url := "https://groupietrackers.herokuapp.com/api/locations"
 		_data, err := utils.GetAPI(url)
 		if err != nil {
@@ -19,7 +18,7 @@ func Index(res http.ResponseWriter, req *http.Request) {
 		}
 		data := string(_data)
 		cells := utils.FormatMap(data)
-
+		
 		utils.RenderPage(pagePath, &cells, res)
 		log.Println("✅ Map page get with success")
 	}
