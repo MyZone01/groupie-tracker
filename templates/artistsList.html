@@ -8,14 +8,12 @@
     <h1>GROUPIE</h1>
     <div class="grid">
         {{ range . }}
-            {{ if not (eq .Name "Mamonas Assassinas") }}
-            <a href="/artist/{{ .Id }}">
-                <article class="glass">
-                    <img src="{{ .Image }}" alt="artist" />
-                    <h2>{{ .Name }}</h2>
-                </article>
-            </a>
-            {{ end }}
+        <a href="/artist/{{ .Id }}">
+            <article class="glass">
+                <img src="{{ .Image }}" alt="artist" />
+                <h2>{{ .Name }}</h2>
+            </article>
+        </a>
         {{ end }}
     </div>
 </main>
