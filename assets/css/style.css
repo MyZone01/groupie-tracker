@@ -149,7 +149,7 @@ h1 {
     color: white;
     font-weight: bold;
     line-height: 1.5;
-    font-size: 75vh;
+    font-size: 80vh;
     letter-spacing: 2.5rem;
     font-family: 'Taller', sans-serif;
     -webkit-background-clip: text;
@@ -229,13 +229,6 @@ main article h3 {
 }
 
 article.glass {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background-color: #00000035;
-    box-shadow: rgba(0, 0, 0, 0.15) 0px 15px 25px, rgba(0, 0, 0, 0.05) 0px 5px 10px;
-    border-radius: 1.5rem;
     width: 20vw;
     height: 50vh;
     padding: 2.5rem;
@@ -267,6 +260,67 @@ article.glass {
     border-radius: 2rem;
 }
 
+.container {
+    position: absolute;
+    display: grid;
+    height: 80vh;
+    gap: .125rem;
+    grid-template-columns: repeat(55, 1fr);
+    grid-template-rows: repeat(35, 1fr);
+    counter-reset: cell-counter;
+}
+
+.cell {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1em;
+    border-radius: 50%;
+    width: 17.5px;
+    height: 17.5px;
+    overflow: hidden;
+    color: transparent;
+}
+
+.cell.index .tooltip {
+    position: absolute;
+    top: 0;
+    opacity: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 0;
+    height: 0;
+    padding: .25rem;
+    border-radius: .25rem;
+    z-index: 100;
+    background-color: black;
+    box-shadow: rgba(255, 255, 255, 0.25) 0px 6px 12px -2px, rgba(255, 255, 255, 0.3) 0px 3px 7px -3px;
+}
+
+.cell.index:hover {
+    overflow: visible;
+    color: white;
+    z-index: 100;
+    transform: scale(1.75);
+}
+
+.cell.index:hover .tooltip {
+    width: auto;
+    height: auto;
+    opacity: 1;
+    transition: transform .5s ease-in-out;
+}
+
+.cell.index:hover .tooltip.top {
+    transform: translateY(-100%);
+}
+
+.cell.index:hover .tooltip.bottom {
+    transform: translateY(65%);
+}
+
 footer {
     position: fixed;
     bottom: 0;
@@ -275,7 +329,7 @@ footer {
     justify-content: center;
     width: 100%;
     background-color: #00000035;
-    padding: .5rem;
+    height: 5vh;
     font-style: 1.25rem;
     backdrop-filter: blur(5px);
 }
