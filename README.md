@@ -16,6 +16,9 @@ This project consists on receiving a given API and manipulate the data contained
 go run .
 ```
 
+##  DEPLOYMENT URL
+[Deployment URL](https://groupie-tracker-production-130b.up.railway.app/)
+
 ##  AUTHOR
 +   Serigne Saliou Mbacké Mbaye
 +   Bakar Seck
