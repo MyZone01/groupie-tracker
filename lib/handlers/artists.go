@@ -16,10 +16,16 @@ func ArtistList(res http.ResponseWriter, req *http.Request) {
 		data, err := utils.GetAPI(url)
 		if err != nil {
 			utils.RenderPage("500", nil, res)
+			log.Println("❌ Internal Server Error ", err)
 			return
 		}
 		var artists []models.ArtistModel
-		json.Unmarshal(data, &artists)
+		err = json.Unmarshal(data, &artists)
+		if err != nil {
+			utils.RenderPage("500", nil, res)
+			log.Println("❌ Internal Server Error ", err)
+			return
+		}
 
 		pagePath := "artistsList"
 		res.WriteHeader(http.StatusOK)
@@ -46,7 +52,7 @@ func ArtistInfos(res http.ResponseWriter, req *http.Request) {
 			return
 		}
 
-		if artist.Id != 0 {
+		if artist.Id > 0 && artist.Id <= 52 {
 			artist.FirstAlbum = utils.FormatDates(artist.FirstAlbum)
 
 			relationURL := "https://groupietrackers.herokuapp.com/api/relation/" + idArtist

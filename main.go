@@ -23,6 +23,7 @@ func main() {
 	http.HandleFunc("/", handlers.Index)
 	http.HandleFunc("/artists/", handlers.ArtistList)
 	http.HandleFunc("/artist/", handlers.ArtistInfos)
+	http.HandleFunc("/events/", handlers.DatesList)
 
 	log.Println("Server started and listening on", PORT)
 	log.Println(ADDRESS + PORT)

@@ -14,6 +14,7 @@ func Index(res http.ResponseWriter, req *http.Request) {
 		_data, err := utils.GetAPI(url)
 		if err != nil {
 			utils.RenderPage("500", nil, res)
+			log.Println("❌ Internal Server Error ", err)
 			return
 		}
 		data := string(_data)

@@ -1,0 +1,112 @@
+{{define "title"}} | Dates{{end}}
+
+{{define "artist"}} {{end}}
+
+{{define "content"}}
+<main>
+    <h1 class="spacy">GROUPIE</h1>
+    <style>
+        #event-list {
+            position: absolute;
+            top: 7.5vh;
+            display: flex;
+            align-items: center;
+            width: 100vw;
+            overflow: scroll;
+            padding: 2.5rem;
+            scrollbar-width: 10px;
+        }
+
+        #event-list::-webkit-scrollbar {
+            height: 10px;
+        }
+
+        .event {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-right: 2.5rem;
+        }
+
+        .event .day {
+            font-size: 10rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .event .month {
+            text-transform: uppercase;
+            font-size: 2.5rem;
+        }
+
+        .event .year {
+            font-size: 5rem;
+        }
+
+        #scroll-button-end {
+            position: fixed;
+            cursor: pointer;
+            right: 2.5rem;
+            z-index: 50;
+        }
+
+        #scroll-button-start {
+            position: fixed;
+            display: none;
+            cursor: pointer;
+            left: 2.5rem;
+            z-index: 50;
+        }
+
+        #scroll-button-end i {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M10.0859 12.0001L5.29297 16.793L6.70718 18.2072L12.9143 12.0001L6.70718 5.79297L5.29297 7.20718L10.0859 12.0001ZM17.0001 6.00008L17.0001 18.0001H15.0001L15.0001 6.00008L17.0001 6.00008Z'%3E%3C/path%3E%3C/svg%3E");
+        }
+
+        #scroll-button-start i {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M13.9142 12.0001L18.7071 7.20718L17.2929 5.79297L11.0858 12.0001L17.2929 18.2072L18.7071 16.793L13.9142 12.0001ZM7 18.0001V6.00008H9V18.0001H7Z'%3E%3C/path%3E%3C/svg%3E");
+        }
+    </style>
+    <div id="event-list">
+        <button id="scroll-button-end">
+            <i></i>
+        </button>
+        <button id="scroll-button-start">
+            <i></i>
+        </button>
+        {{range . }}
+        <a href="/artist/{{ .Id }}" class="event glass">
+            <div class="day">{{.Day}}</div>
+            <div class="month">{{.Month}}</div>
+            <div class="year">{{.Year}}</div>
+        </a>
+        {{end}}
+        <script>
+            const scrollToStartButton = document.getElementById('scroll-button-start');
+            const scrollToEndButton = document.getElementById('scroll-button-end');
+            const eventList = document.getElementById('event-list');
+
+            eventList.addEventListener('scroll', () => {
+                const scrollPosition = Math.ceil(eventList.scrollLeft);
+                const scrollMax = eventList.scrollWidth - eventList.clientWidth;
+
+                scrollToStartButton.style.display = scrollPosition > 0 ? 'flex' : 'none';
+                scrollToEndButton.style.display = scrollPosition < scrollMax ? 'flex' : 'none';
+            });
+
+            scrollToStartButton.addEventListener('click', () => {
+                eventList.scrollTo({
+                    left: 0,
+                    behavior: 'smooth'
+                });
+            });
+
+            scrollToEndButton.addEventListener('click', () => {
+                eventList.scrollTo({
+                    left: eventList.scrollWidth,
+                    behavior: 'smooth'
+                });
+            });
+        </script>
+    </div>
+</main>
+{{end}}
