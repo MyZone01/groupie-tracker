@@ -19,14 +19,28 @@
             <a href="/artists">Artists</a>
             {{template "artist" . }}
         </nav>
-        <div class="search">
+        <form method="post" action="/search" class="search">
             <input type="search" name="search" id="search" placeholder="Search...">
-            <button>
+            <button type="submit">
                 <i></i>
             </button>
-        </div>
+            </>
     </header>
     {{template "content" .}}
+    <script>
+        const searchInput = document.getElementById("search");
+        const searchForm = document.querySelector("form.search")
+        searchInput.addEventListener("input", async (event) => {
+            event.preventDefault();
+            const formData = new FormData(searchForm);
+            const response = await fetch('/suggestion/', {
+                method: 'POST',
+                body: formData
+            });
+            const data = await response.text();
+            console.log(data);
+        })
+    </script>
     <footer>
         Copyright make with <span class="heart">❤️</span> and ☕ by SSMM0498 & BAKSECK
     </footer>

@@ -62,7 +62,6 @@ func RenderPage(pagePath string, data any, res http.ResponseWriter) {
 	if err != nil {
 		log.Println("🚨 " + err.Error())
 	} else {
-		res.WriteHeader(http.StatusOK)
 		tpl.Execute(res, data)
 	}
 }

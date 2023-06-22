@@ -1,7 +1,7 @@
 package groupietracker
 
 import (
-	"encoding/json"
+	models "groupietracker/lib/models"
 	utils "groupietracker/lib/utils"
 	"log"
 	"net/http"
@@ -11,40 +11,15 @@ import (
 	"time"
 )
 
-type DateModel struct {
-	Index []struct {
-		ID    int      `json:"id"`
-		Dates []string `json:"dates"`
-	} `json:"index"`
-}
-
-type DateFormat struct {
-	Id    string
-	Day   string
-	Month string
-	Year  string
-}
-
 func DatesList(res http.ResponseWriter, req *http.Request) {
 	if utils.ValidateRequest(req, res, "/events/", http.MethodGet) {
 		pagePath := "events"
-		res.WriteHeader(http.StatusOK)
-		url := "https://groupietrackers.herokuapp.com/api/dates"
-		data, err := utils.GetAPI(url)
-		if err != nil {
-			utils.RenderPage("500", nil, res)
-			log.Println("❌ Internal Server Error ", err)
-			return
-		}
-		var _datesList DateModel
-		err = json.Unmarshal(data, &_datesList)
-		if err != nil {
-			utils.RenderPage("500", nil, res)
-			log.Println("❌ Internal Server Error ", err)
+		_datesList, err := utils.GetDates(res)
+		if err {
 			return
 		}
 		datesList := []string{}
-		datesFormatList := []DateFormat{}
+		datesFormatList := []models.DateFormat{}
 
 		for _, dm := range _datesList.Index {
 			id := dm.ID
@@ -62,11 +37,11 @@ func DatesList(res http.ResponseWriter, req *http.Request) {
 		for _, _date := range datesList {
 			_dateFormat := strings.Split(_date, "/")
 			date := strings.Split(utils.FormatDates(_dateFormat[0]), " ")
-			dateFormat := DateFormat{
-				_dateFormat[1],
-				date[0],
-				date[1],
-				date[2],
+			dateFormat := models.DateFormat{
+				Id: _dateFormat[1],
+				Day: date[0],
+				Month: date[1],
+				Year: date[2],
 			}
 			datesFormatList = append(datesFormatList, dateFormat)
 		}

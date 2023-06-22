@@ -5,7 +5,7 @@ type ArtistModel struct {
 	Image        string   `json:"image"`
 	Name         string   `json:"name"`
 	Members      []string `json:"members"`
-	CreationDate int      `json:"creationDate"`
+	CreationDate int   `json:"creationDate"`
 	FirstAlbum   string   `json:"firstAlbum"`
 	City         string
 	Relation     []Event
