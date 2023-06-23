@@ -42,7 +42,7 @@ func GetArtist(idArtist int, res http.ResponseWriter) (models.ArtistModel, bool)
 	}
 	artist.FirstAlbum = FormatDates(artist.FirstAlbum)
 
-	relationURL := fmt.Sprintf("https://groupietrackers.herokuapp.com/api/artists/%d", idArtist)
+	relationURL := fmt.Sprintf("https://groupietrackers.herokuapp.com/api/relation/%d", idArtist)
 	data, err := GetAPI(relationURL)
 	if err != nil {
 		RenderPage("500", nil, res)
