@@ -17,6 +17,7 @@ go run .
 ```
 
 ##  DEPLOYMENT URL
+This URL is temporary and has probably expired. Contact administrator to get a new one.
 [Deployment URL](https://groupie-tracker-production-130b.up.railway.app/)
 
 ##  AUTHOR
