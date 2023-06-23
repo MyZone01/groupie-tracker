@@ -15,7 +15,7 @@ type SearchSuggestion struct {
 	Members       []string
 	Locations     []string
 	FirstAlbums   []string
-	CreationDates []int
+	CreationDates []string
 }
 
 func Suggestion(res http.ResponseWriter, req *http.Request) {
@@ -26,26 +26,27 @@ func Suggestion(res http.ResponseWriter, req *http.Request) {
 		Locations := []string{}
 		Members := []string{}
 		FirstAlbums := []string{}
-		CreationDates := []int{}
+		CreationDates := []string{}
 
 		artists, err := utils.GetArtistList(res)
 		if err {
 			return
 		}
 
+		log.Println("✅ Suggestion - " + searchQuery)
 		for _, artist := range artists {
 			if strings.Contains(strings.ToLower(artist.Name), searchQuery) {
-				Names = append(Names, artist.Name)
+				Names = append(Names, fmt.Sprintf("%s@%d", artist.Name, artist.Id))
 			}
 			if strings.Contains(strings.ToLower(artist.FirstAlbum), searchQuery) {
-				FirstAlbums = append(FirstAlbums, artist.FirstAlbum)
+				FirstAlbums = append(FirstAlbums, fmt.Sprintf("%s@%d", artist.FirstAlbum, artist.Id))
 			}
 			if fmt.Sprintf("%d", artist.CreationDate) == searchQuery {
-				CreationDates = append(CreationDates, artist.CreationDate)
+				CreationDates = append(CreationDates, fmt.Sprintf("%d@%d", artist.CreationDate, artist.Id))
 			}
 			for _, member := range artist.Members {
 				if strings.Contains(strings.ToLower(member), searchQuery) {
-					Members = append(Members, member)
+					Members = append(Members, fmt.Sprintf("%s@%d", member, artist.Id))
 				}
 			}
 		}
@@ -54,14 +55,15 @@ func Suggestion(res http.ResponseWriter, req *http.Request) {
 		if err {
 			return
 		}
-		var locations []models.LocationModel
-		_err := json.Unmarshal(data, &locations)
+		var _data models.LocationModel
+		_err := json.Unmarshal(data, &_data)
 		if _err != nil {
 			utils.RenderPage("500", nil, res)
-			log.Println("❌ Internal Server Error ", err)
+			log.Println("❌ Internal Server Error ", _err)
 			return
 		}
 
+		locations := _data.Index
 		for _, location := range locations {
 			for _, _location := range location.Locations {
 				__location := strings.Split(_location, "-")
@@ -69,10 +71,10 @@ func Suggestion(res http.ResponseWriter, req *http.Request) {
 					city := strings.ToLower(strings.ReplaceAll(__location[0], "_", " "))
 					country := strings.ToLower(strings.ReplaceAll(__location[1], "_", " "))
 					if strings.Contains(strings.ToLower(city), searchQuery) {
-						Locations = append(Names, city)
+						Locations = append(Locations, fmt.Sprintf("%s@%d", city, location.Id))
 					}
 					if strings.Contains(strings.ToLower(country), searchQuery) {
-						Locations = append(Names, country)
+						Locations = append(Locations, fmt.Sprintf("%s@%d", country, location.Id))
 					}
 				}
 			}
@@ -92,7 +94,6 @@ func Suggestion(res http.ResponseWriter, req *http.Request) {
 			return
 		}
 
-		log.Println("✅ Suggestion - " + searchQuery)
 		res.Header().Set("Content-Type", "application/json")
 		res.WriteHeader(http.StatusOK)
 		res.Write(jsonResponse)
