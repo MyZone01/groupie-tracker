@@ -32,12 +32,10 @@
         <div class="glass">
             <h3>Concert Date</h3>
             <div class="tags">
-                {{range .Relation}}
-                <div data-place="{{.Country}} - {{.City}}">
-                    {{range .Dates}}
-                    <p class="tag date">{{.}}</p>
+                {{range $id, $location := .Relation}}
+                    {{range $location.Dates}}
+                    <p data-place="{{$location.Country}} - {{$location.City}}" class="tag date">{{.}}</p>
                     {{end}}
-                </div>
                 {{end}}
             </div>
         </div>
@@ -49,26 +47,30 @@
         places.forEach((concert) => {
             concert.addEventListener('mouseover', () => {
                 const concertPlace = concert.getAttribute('data-place');
-                const correspondingDate = document.querySelector(`div[data-place="${concertPlace}"]`);
-                correspondingDate.classList.add("glowing")
+                const correspondingDates = document.querySelectorAll(`.tag.date[data-place="${concertPlace}"]`);
+                correspondingDates.forEach((date) => {
+                    date.classList.add("glowing")
+                })
             });
 
             concert.addEventListener('mouseout', () => {
                 const concertPlace = concert.getAttribute('data-place');
-                const correspondingDate = document.querySelector(`div[data-place="${concertPlace}"]`);
-                correspondingDate.classList.remove("glowing")
+                const correspondingDates = document.querySelectorAll(`.tag.date[data-place="${concertPlace}"]`);
+                correspondingDates.forEach((date) => {
+                    date.classList.remove("glowing")
+                })
             });
         });
 
         dates.forEach((date) => {
             date.addEventListener('mouseover', () => {
-                const concertPlace = date.parentElement.getAttribute('data-place');
+                const concertPlace = date.getAttribute('data-place');
                 const correspondingConcert = document.querySelector(`.tag.place[data-place="${concertPlace}"]`);
                 correspondingConcert.classList.add("glowing")
             });
 
             date.addEventListener('mouseout', () => {
-                const concertPlace = date.parentElement.getAttribute('data-place');
+                const concertPlace = date.getAttribute('data-place');
                 const correspondingConcert = document.querySelector(`.tag.place[data-place="${concertPlace}"]`);
                 correspondingConcert.classList.remove("glowing")
             });

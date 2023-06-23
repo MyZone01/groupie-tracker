@@ -82,6 +82,7 @@ header .logo {
 }
 
 header .search {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -397,14 +398,12 @@ footer span.heart {
     background-color: #1538d4;
 }
 
-.glowing.tag,
-.glowing>.tag {
+.glowing.tag {
     background-color: #1538d4;
     position: relative;
 }
 
-.glowing.tag::before,
-.glowing>.tag::before {
+.glowing.tag::before {
     content: '';
     position: absolute;
     top: 0;
