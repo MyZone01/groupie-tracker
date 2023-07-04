@@ -10,7 +10,7 @@ import (
 )
 
 func ArtistList(res http.ResponseWriter, req *http.Request) {
-	if utils.ValidateRequest(req, res, "/artists/", http.MethodGet) {
+	if utils.ValidateRequest(req, res, "/artists", http.MethodGet) {
 		artists, err := utils.GetArtistList(res)
 		if err {
 			return

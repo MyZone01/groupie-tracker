@@ -34,7 +34,7 @@ func ValidateRequest(req *http.Request, res http.ResponseWriter, url, method str
 	if req.Method != method {
 		res.WriteHeader(http.StatusMethodNotAllowed)
 		fmt.Fprintf(res, "%s", "Error - Method not allowed")
-		log.Println("405 ❌ - Method not allowed")
+		log.Printf("405 ❌ - Method not allowed %s - %s on URL : %s\n", req.Method, method, url)
 		return false
 	}
 	return true

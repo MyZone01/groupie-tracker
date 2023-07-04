@@ -12,7 +12,7 @@ import (
 )
 
 func DatesList(res http.ResponseWriter, req *http.Request) {
-	if utils.ValidateRequest(req, res, "/events/", http.MethodGet) {
+	if utils.ValidateRequest(req, res, "/events", http.MethodGet) {
 		pagePath := "events"
 		_datesList, err := utils.GetDates(res)
 		if err {

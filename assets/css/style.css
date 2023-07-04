@@ -171,6 +171,8 @@ h1 {
     background-size: contain;
     text-transform: uppercase;
     background-image: url('/assets/img/background.jpg');
+    background-size: cover;
+    background-position: center center;
     color: transparent;
     z-index: -1;
     white-space: nowrap;
