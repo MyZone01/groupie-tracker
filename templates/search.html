@@ -1,0 +1,24 @@
+{{define "title"}} | Dates{{end}}
+
+{{define "artist"}} {{end}}
+
+{{define "content"}}
+<main>
+    <h1 class="spacy">GROUPIE</h1>
+    <div class="grid">
+        {{ range . }}
+        <a href="/artist/{{ .Artist.Id }}">
+            <article class="glass">
+                <div class="row">
+                    {{ range .SearchType }}
+                    <span class="tag">{{.}}</span>
+                    {{ end }}
+                </div>
+                <img src="{{ .Artist.Image }}" alt="artist" />
+                <h3>{{ .Artist.Name }}</h3>
+            </article>
+        </a>
+        {{ end }}
+    </div>
+</main>
+{{ end }}

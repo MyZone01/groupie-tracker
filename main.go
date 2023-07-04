@@ -21,11 +21,11 @@ func main() {
 	http.Handle("/assets/", http.StripPrefix("/assets/", fs))
 
 	http.HandleFunc("/", handlers.Index)
-	http.HandleFunc("/artists/", handlers.ArtistList)
+	http.HandleFunc("/artists", handlers.ArtistList)
 	http.HandleFunc("/artist/", handlers.ArtistInfos)
-	http.HandleFunc("/events/", handlers.DatesList)
-	http.HandleFunc("/suggestion/", handlers.Suggestion)
-	http.HandleFunc("/search/", handlers.Search)
+	http.HandleFunc("/events", handlers.DatesList)
+	http.HandleFunc("/suggestion", handlers.Suggestion)
+	http.HandleFunc("/search", handlers.Search)
 
 	log.Println("Server started and listening on", PORT)
 	log.Println(ADDRESS + PORT)

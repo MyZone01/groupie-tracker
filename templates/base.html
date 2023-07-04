@@ -57,7 +57,7 @@
             <a href="/artists">Artists</a>
             {{template "artist" . }}
         </nav>
-        <form method="post" action="/search" class="search">
+        <form method="POST" action="/search" class="search">
             <input type="search" name="search" id="search" placeholder="Search...">
             <button type="submit">
                 <i></i>
@@ -152,7 +152,7 @@
             event.preventDefault();
             if (searchInput.value !== "") {
                 const formData = new FormData(searchForm);
-                const response = await fetch('/suggestion/', {
+                const response = await fetch('/suggestion', {
                     method: 'POST',
                     body: formData
                 });
