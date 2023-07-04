@@ -238,13 +238,14 @@ main article h3 {
     background-color: #00000035;
     box-shadow: rgba(0, 0, 0, 0.15) 0px 15px 25px, rgba(0, 0, 0, 0.05) 0px 5px 10px;
     border-radius: 1.5rem;
-    width: 30vw;
+    /* width: 30vw; */
     padding: 1.25rem;
     backdrop-filter: blur(5px);
 }
 
 article.glass {
     width: 20vw;
+    flex-basis: 30%;
     height: 50vh;
     padding: 2.5rem;
     margin-bottom: 3rem;
@@ -418,4 +419,22 @@ footer span.heart {
     opacity: 0.25;
     border-radius: 2rem;
     animation: glowing .75s ease-in-out infinite alternate;
+}
+
+
+/* Desktop*/
+@media screen and (min-width: 1024pxpx) {
+
+}
+
+/* Tablet */
+@media screen and (min-width: 767px) and (max-width: 1482px) {
+    article.glass {
+        width: 40vw;
+    }
+}
+
+/* Phone */
+@media screen and (min-width: 1024pxpx) {
+
 }
