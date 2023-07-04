@@ -4,15 +4,18 @@
 
 {{define "content"}}
 <main>
+    {{ if ne (len .) 0 }}
     <h1 class="spacy">GROUPIE</h1>
     <div class="grid">
         {{ range . }}
         <a href="/artist/{{ .Artist.Id }}">
             <article class="glass">
                 <div class="row">
-                    {{ range .SearchType }}
-                    <span class="tag">{{.}}</span>
-                    {{ end }}
+                    {{ if ne .Names 0 }}<span class="tag">Names: {{.Names}}</span>{{end}}
+                    {{ if ne .Members 0 }}<span class="tag">Members: {{.Members}}</span>{{end}}
+                    {{ if ne .Locations 0 }}<span class="tag">Locations: {{.Locations}}</span>{{end}}
+                    {{ if ne .FirstAlbums 0 }}<span class="tag">FirstAlbums: {{.FirstAlbums}}</span>{{end}}
+                    {{ if ne .CreationDates 0 }}<span class="tag">CreationDates: {{.CreationDates}}</span>{{end}}
                 </div>
                 <img src="{{ .Artist.Image }}" alt="artist" />
                 <h3>{{ .Artist.Name }}</h3>
@@ -20,5 +23,8 @@
         </a>
         {{ end }}
     </div>
+    {{ else }}
+    <h1>No Result</h1>
+    {{ end }}
 </main>
 {{ end }}

@@ -19,8 +19,12 @@ type SearchSuggestion struct {
 }
 
 type SearchResult struct {
-	SearchType []string
-	Artist      models.ArtistModel
+	Names         int
+	Members       int
+	Locations     int
+	FirstAlbums   int
+	CreationDates int
+	Artist        models.ArtistModel
 }
 
 func GetSearchSuggestion(res http.ResponseWriter, searchQuery string) (SearchSuggestion, bool) {
@@ -103,39 +107,39 @@ func GetSearchResult(res http.ResponseWriter, searchQuery string) (map[string]Se
 		if strings.Contains(strings.ToLower(artist.Name), searchQuery) {
 			if _, exist := response[artist.Name]; exist {
 				response[artist.Name] = SearchResult{
-					append(response[artist.Name].SearchType, "Name"),
-					artist,
+					Names: response[artist.Name].Names+1,
+					Artist: artist,
 				}
 			} else {
 				response[artist.Name] = SearchResult{
-					[]string{"Name"},
-					artist,
+					Names: 1,
+					Artist: artist,
 				}
 			}
 		}
 		if strings.Contains(strings.ToLower(artist.FirstAlbum), searchQuery) {
 			if _, exist := response[artist.Name]; exist {
 				response[artist.Name] = SearchResult{
-					append(response[artist.Name].SearchType, "FirstAlbum"),
-					artist,
+					FirstAlbums: response[artist.Name].FirstAlbums+1,
+					Artist: artist,
 				}
 			} else {
 				response[artist.Name] = SearchResult{
-					[]string{"FirstAlbum"},
-					artist,
+					FirstAlbums: 1,
+					Artist: artist,
 				}
 			}
 		}
 		if fmt.Sprintf("%d", artist.CreationDate) == searchQuery {
 			if _, exist := response[artist.Name]; exist {
 				response[artist.Name] = SearchResult{
-					append(response[artist.Name].SearchType, "CreationDate"),
-					artist,
+					CreationDates: response[artist.Name].CreationDates+1,
+					Artist: artist,
 				}
 			} else {
 				response[artist.Name] = SearchResult{
-					[]string{"CreationDate"},
-					artist,
+					CreationDates: 1,
+					Artist: artist,
 				}
 			}
 		}
@@ -143,13 +147,13 @@ func GetSearchResult(res http.ResponseWriter, searchQuery string) (map[string]Se
 			if strings.Contains(strings.ToLower(member), searchQuery) {
 				if _, exist := response[artist.Name]; exist {
 					response[artist.Name] = SearchResult{
-						append(response[artist.Name].SearchType, "Members"),
-						artist,
+						Members: response[artist.Name].Members+1,
+						Artist: artist,
 					}
 				} else {
 					response[artist.Name] = SearchResult{
-						[]string{"Members"},
-						artist,
+						Members: 1,
+						Artist: artist,
 					}
 				}
 			}
@@ -179,13 +183,13 @@ func GetSearchResult(res http.ResponseWriter, searchQuery string) (map[string]Se
 					artist, _ := utils.GetArtist(location.Id, res)
 					if _, exist := response[artist.Name]; exist {
 						response[artist.Name] = SearchResult{
-							append(response[artist.Name].SearchType, "Location"),
-							artist,
+							Locations: response[artist.Name].Locations+1,
+							Artist: artist,
 						}
 					} else {
 						response[artist.Name] = SearchResult{
-							[]string{"Location"},
-							artist,
+							Locations: 1,
+							Artist: artist,
 						}
 					}
 				} else {
@@ -193,13 +197,13 @@ func GetSearchResult(res http.ResponseWriter, searchQuery string) (map[string]Se
 						artist, _ := utils.GetArtist(location.Id, res)
 						if _, exist := response[artist.Name]; exist {
 							response[artist.Name] = SearchResult{
-								append(response[artist.Name].SearchType, "Location"),
-								artist,
+								Locations: response[artist.Name].Locations+1,
+								Artist: artist,
 							}
 						} else {
 							response[artist.Name] = SearchResult{
-								[]string{"Location"},
-								artist,
+								Locations: 1,
+								Artist: artist,
 							}
 						}
 					}
