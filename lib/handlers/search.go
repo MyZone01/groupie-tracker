@@ -44,10 +44,10 @@ func GetSearchSuggestion(res http.ResponseWriter, searchQuery string) (SearchSug
 			Names = append(Names, fmt.Sprintf("%s@%d", artist.Name, artist.Id))
 		}
 		if strings.Contains(strings.ToLower(artist.FirstAlbum), searchQuery) {
-			FirstAlbums = append(FirstAlbums, fmt.Sprintf("%s@%d", artist.FirstAlbum, artist.Id))
+			FirstAlbums = append(FirstAlbums, fmt.Sprintf("%s, %s@%d", artist.Name, artist.FirstAlbum, artist.Id))
 		}
 		if fmt.Sprintf("%d", artist.CreationDate) == searchQuery {
-			CreationDates = append(CreationDates, fmt.Sprintf("%d@%d", artist.CreationDate, artist.Id))
+			CreationDates = append(CreationDates, fmt.Sprintf("%s, %d@%d", artist.Name, artist.CreationDate, artist.Id))
 		}
 		for _, member := range artist.Members {
 			if strings.Contains(strings.ToLower(member), searchQuery) {
@@ -73,13 +73,13 @@ func GetSearchSuggestion(res http.ResponseWriter, searchQuery string) (SearchSug
 		for _, _location := range location.Locations {
 			__location := strings.Split(_location, "-")
 			if len(__location) == 2 {
-				city := strings.ToLower(strings.ReplaceAll(__location[0], "_", " "))
-				country := strings.ToLower(strings.ReplaceAll(__location[1], "_", " "))
-				if strings.Contains(strings.ToLower(city), searchQuery) {
-					Locations = append(Locations, fmt.Sprintf("%s@%d", city, location.Id))
-				}
-				if strings.Contains(strings.ToLower(country), searchQuery) {
-					Locations = append(Locations, fmt.Sprintf("%s@%d", country, location.Id))
+				city := strings.Title(strings.ReplaceAll(__location[0], "_", " "))
+				country := strings.Title(strings.ReplaceAll(__location[1], "_", " "))
+
+				if strings.Contains(searchQuery, strings.ToLower(city)) || strings.Contains(strings.ToLower(city), searchQuery) {
+					Locations = append(Locations, fmt.Sprintf("%s, %s@%d", city, country, location.Id))
+				} else if strings.Contains(searchQuery, strings.ToLower(country)) || strings.Contains(strings.ToLower(country), searchQuery) {
+					Locations = append(Locations, fmt.Sprintf("%s, %s@%d", city, country, location.Id))
 				}
 			}
 		}
@@ -107,12 +107,16 @@ func GetSearchResult(res http.ResponseWriter, searchQuery string) (map[string]Se
 		if strings.Contains(strings.ToLower(artist.Name), searchQuery) {
 			if _, exist := response[artist.Name]; exist {
 				response[artist.Name] = SearchResult{
-					Names: response[artist.Name].Names+1,
-					Artist: artist,
+					Names:         response[artist.Name].Names + 1,
+					Members:       response[artist.Name].Members,
+					Locations:     response[artist.Name].Locations,
+					FirstAlbums:   response[artist.Name].FirstAlbums,
+					CreationDates: response[artist.Name].CreationDates,
+					Artist:        artist,
 				}
 			} else {
 				response[artist.Name] = SearchResult{
-					Names: 1,
+					Names:  1,
 					Artist: artist,
 				}
 			}
@@ -120,26 +124,34 @@ func GetSearchResult(res http.ResponseWriter, searchQuery string) (map[string]Se
 		if strings.Contains(strings.ToLower(artist.FirstAlbum), searchQuery) {
 			if _, exist := response[artist.Name]; exist {
 				response[artist.Name] = SearchResult{
-					FirstAlbums: response[artist.Name].FirstAlbums+1,
-					Artist: artist,
+					FirstAlbums:   response[artist.Name].FirstAlbums + 1,
+					Names:         response[artist.Name].Names,
+					Members:       response[artist.Name].Members,
+					Locations:     response[artist.Name].Locations,
+					CreationDates: response[artist.Name].CreationDates,
+					Artist:        artist,
 				}
 			} else {
 				response[artist.Name] = SearchResult{
 					FirstAlbums: 1,
-					Artist: artist,
+					Artist:      artist,
 				}
 			}
 		}
 		if fmt.Sprintf("%d", artist.CreationDate) == searchQuery {
 			if _, exist := response[artist.Name]; exist {
 				response[artist.Name] = SearchResult{
-					CreationDates: response[artist.Name].CreationDates+1,
-					Artist: artist,
+					CreationDates: response[artist.Name].CreationDates + 1,
+					Names:         response[artist.Name].Names,
+					Members:       response[artist.Name].Members,
+					Locations:     response[artist.Name].Locations,
+					FirstAlbums:   response[artist.Name].FirstAlbums,
+					Artist:        artist,
 				}
 			} else {
 				response[artist.Name] = SearchResult{
 					CreationDates: 1,
-					Artist: artist,
+					Artist:        artist,
 				}
 			}
 		}
@@ -147,13 +159,17 @@ func GetSearchResult(res http.ResponseWriter, searchQuery string) (map[string]Se
 			if strings.Contains(strings.ToLower(member), searchQuery) {
 				if _, exist := response[artist.Name]; exist {
 					response[artist.Name] = SearchResult{
-						Members: response[artist.Name].Members+1,
-						Artist: artist,
+						Members:       response[artist.Name].Members + 1,
+						Names:         response[artist.Name].Names,
+						Locations:     response[artist.Name].Locations,
+						FirstAlbums:   response[artist.Name].FirstAlbums,
+						CreationDates: response[artist.Name].CreationDates,
+						Artist:        artist,
 					}
 				} else {
 					response[artist.Name] = SearchResult{
 						Members: 1,
-						Artist: artist,
+						Artist:  artist,
 					}
 				}
 			}
@@ -179,32 +195,38 @@ func GetSearchResult(res http.ResponseWriter, searchQuery string) (map[string]Se
 			if len(__location) == 2 {
 				city := strings.ToLower(strings.ReplaceAll(__location[0], "_", " "))
 				country := strings.ToLower(strings.ReplaceAll(__location[1], "_", " "))
-				if strings.Contains(strings.ToLower(city), searchQuery) {
+				if strings.Contains(searchQuery, strings.ToLower(city)) || strings.Contains(strings.ToLower(city), searchQuery) {
 					artist, _ := utils.GetArtist(location.Id, res)
 					if _, exist := response[artist.Name]; exist {
 						response[artist.Name] = SearchResult{
-							Locations: response[artist.Name].Locations+1,
-							Artist: artist,
+							Locations:     response[artist.Name].Locations + 1,
+							Names:         response[artist.Name].Names,
+							Members:       response[artist.Name].Members,
+							FirstAlbums:   response[artist.Name].FirstAlbums,
+							CreationDates: response[artist.Name].CreationDates,
+							Artist:        artist,
 						}
 					} else {
 						response[artist.Name] = SearchResult{
 							Locations: 1,
-							Artist: artist,
+							Artist:    artist,
 						}
 					}
-				} else {
-					if strings.Contains(strings.ToLower(country), searchQuery) {
-						artist, _ := utils.GetArtist(location.Id, res)
-						if _, exist := response[artist.Name]; exist {
-							response[artist.Name] = SearchResult{
-								Locations: response[artist.Name].Locations+1,
-								Artist: artist,
-							}
-						} else {
-							response[artist.Name] = SearchResult{
-								Locations: 1,
-								Artist: artist,
-							}
+				} else if strings.Contains(searchQuery, strings.ToLower(country)) || strings.Contains(strings.ToLower(country), searchQuery) {
+					artist, _ := utils.GetArtist(location.Id, res)
+					if _, exist := response[artist.Name]; exist {
+						response[artist.Name] = SearchResult{
+							Locations:     response[artist.Name].Locations + 1,
+							Names:         response[artist.Name].Names,
+							Members:       response[artist.Name].Members,
+							FirstAlbums:   response[artist.Name].FirstAlbums,
+							CreationDates: response[artist.Name].CreationDates,
+							Artist:        artist,
+						}
+					} else {
+						response[artist.Name] = SearchResult{
+							Locations: 1,
+							Artist:    artist,
 						}
 					}
 				}
@@ -247,9 +269,16 @@ func Search(res http.ResponseWriter, req *http.Request) {
 				return
 			}
 
-			pagePath := "search"
-			utils.RenderPage(pagePath, &artists, res)
-			log.Println("✅ All artists that match the search request")
+			if len(artists) == 1 {
+				for _, _artist := range artists {
+					artist := _artist.Artist
+					http.Redirect(res, req, fmt.Sprintf("/artist/%d", artist.Id), http.StatusSeeOther)
+				}
+			} else {
+				pagePath := "search"
+				utils.RenderPage(pagePath, &artists, res)
+				log.Println("✅ All artists that match the search request")
+			}
 		}
 	}
 

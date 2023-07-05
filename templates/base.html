@@ -46,6 +46,11 @@
             color: black;
             margin-bottom: 0.25rem;
         }
+
+        #suggestions a:hover {
+            color: #1f3cbc;
+            text-decoration: solid #1f3cbc;
+        }
     </style>
 </head>
 
@@ -70,6 +75,7 @@
         const searchInput = document.getElementById("search");
         const searchForm = document.querySelector("form.search")
         const suggestionsContainer = document.getElementById('suggestions');
+
         function debounce(func, delay) {
             let timeoutId;
 
@@ -111,40 +117,50 @@
             if (!suggestionsContainer.classList.contains("show")) {
                 suggestionsContainer.classList.add("show");
             }
+            console.log(suggestions);
+            if (
+                suggestions.CreationDates.length === 0 &&
+                suggestions.FirstAlbums.length === 0 &&
+                suggestions.Locations.length === 0 &&
+                suggestions.Members.length === 0 &&
+                suggestions.Names.length === 0
+            ) {
+                suggestionsContainer.append(createSuggestionHeading('No Result'))
+            } else {
+                if (suggestions.Names && suggestions.Names.length > 0) {
+                    const namesHeading = createSuggestionHeading('Names');
+                    const namesList = createSuggestionList(suggestions.Names);
+                    suggestionsContainer.appendChild(namesHeading);
+                    suggestionsContainer.appendChild(namesList);
+                }
 
-            if (suggestions.Names && suggestions.Names.length > 0) {
-                const namesHeading = createSuggestionHeading('Names');
-                const namesList = createSuggestionList(suggestions.Names);
-                suggestionsContainer.appendChild(namesHeading);
-                suggestionsContainer.appendChild(namesList);
-            }
+                if (suggestions.Members && suggestions.Members.length > 0) {
+                    const membersHeading = createSuggestionHeading('Members');
+                    const membersList = createSuggestionList(suggestions.Members);
+                    suggestionsContainer.appendChild(membersHeading);
+                    suggestionsContainer.appendChild(membersList);
+                }
 
-            if (suggestions.Members && suggestions.Members.length > 0) {
-                const membersHeading = createSuggestionHeading('Members');
-                const membersList = createSuggestionList(suggestions.Members);
-                suggestionsContainer.appendChild(membersHeading);
-                suggestionsContainer.appendChild(membersList);
-            }
+                if (suggestions.Locations && suggestions.Locations.length > 0) {
+                    const locationsHeading = createSuggestionHeading('Locations');
+                    const locationsList = createSuggestionList(suggestions.Locations);
+                    suggestionsContainer.appendChild(locationsHeading);
+                    suggestionsContainer.appendChild(locationsList);
+                }
 
-            if (suggestions.Locations && suggestions.Locations.length > 0) {
-                const locationsHeading = createSuggestionHeading('Locations');
-                const locationsList = createSuggestionList(suggestions.Locations);
-                suggestionsContainer.appendChild(locationsHeading);
-                suggestionsContainer.appendChild(locationsList);
-            }
+                if (suggestions.FirstAlbums && suggestions.FirstAlbums.length > 0) {
+                    const albumsHeading = createSuggestionHeading('First Albums');
+                    const albumsList = createSuggestionList(suggestions.FirstAlbums);
+                    suggestionsContainer.appendChild(albumsHeading);
+                    suggestionsContainer.appendChild(albumsList);
+                }
 
-            if (suggestions.FirstAlbums && suggestions.FirstAlbums.length > 0) {
-                const albumsHeading = createSuggestionHeading('First Albums');
-                const albumsList = createSuggestionList(suggestions.FirstAlbums);
-                suggestionsContainer.appendChild(albumsHeading);
-                suggestionsContainer.appendChild(albumsList);
-            }
-
-            if (suggestions.CreationDates && suggestions.CreationDates.length > 0) {
-                const datesHeading = createSuggestionHeading('Creation Dates');
-                const datesList = createSuggestionList(suggestions.CreationDates);
-                suggestionsContainer.appendChild(datesHeading);
-                suggestionsContainer.appendChild(datesList);
+                if (suggestions.CreationDates && suggestions.CreationDates.length > 0) {
+                    const datesHeading = createSuggestionHeading('Creation Dates');
+                    const datesList = createSuggestionList(suggestions.CreationDates);
+                    suggestionsContainer.appendChild(datesHeading);
+                    suggestionsContainer.appendChild(datesList);
+                }
             }
         }
 

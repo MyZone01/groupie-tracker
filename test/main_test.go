@@ -22,7 +22,7 @@ func TestSiteAvailable(t *testing.T) {
 }
 
 func TestArtistList(t *testing.T) {
-	req, err := http.NewRequest("GET", "http://localhost:8080/artists/", nil)
+	req, err := http.NewRequest("GET", "http://localhost:8080/artists", nil)
 	if err != nil {
 		t.Fatalf("Could not created request : %v", err)
 	}
