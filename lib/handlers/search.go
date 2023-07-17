@@ -10,24 +10,7 @@ import (
 	"strings"
 )
 
-type SearchSuggestion struct {
-	Names         []string
-	Members       []string
-	Locations     []string
-	FirstAlbums   []string
-	CreationDates []string
-}
-
-type SearchResult struct {
-	Names         int
-	Members       int
-	Locations     int
-	FirstAlbums   int
-	CreationDates int
-	Artist        models.ArtistModel
-}
-
-func GetSearchSuggestion(res http.ResponseWriter, searchQuery string) (SearchSuggestion, bool) {
+func GetSearchSuggestion(res http.ResponseWriter, searchQuery string) (models.SearchSuggestion, bool) {
 	Names := []string{}
 	Locations := []string{}
 	Members := []string{}
@@ -36,7 +19,7 @@ func GetSearchSuggestion(res http.ResponseWriter, searchQuery string) (SearchSug
 
 	artists, err := utils.GetArtistList(res)
 	if err {
-		return SearchSuggestion{}, true
+		return models.SearchSuggestion{}, true
 	}
 
 	for _, artist := range artists {
@@ -44,10 +27,10 @@ func GetSearchSuggestion(res http.ResponseWriter, searchQuery string) (SearchSug
 			Names = append(Names, fmt.Sprintf("%s@%d", artist.Name, artist.Id))
 		}
 		if strings.Contains(strings.ToLower(artist.FirstAlbum), searchQuery) {
-			FirstAlbums = append(FirstAlbums, fmt.Sprintf("%s, %s@%d", artist.Name, artist.FirstAlbum, artist.Id))
+			FirstAlbums = append(FirstAlbums, fmt.Sprintf("%s@%d", artist.FirstAlbum, artist.Id))
 		}
 		if fmt.Sprintf("%d", artist.CreationDate) == searchQuery {
-			CreationDates = append(CreationDates, fmt.Sprintf("%s, %d@%d", artist.Name, artist.CreationDate, artist.Id))
+			CreationDates = append(CreationDates, fmt.Sprintf("%d@%d", artist.CreationDate, artist.Id))
 		}
 		for _, member := range artist.Members {
 			if strings.Contains(strings.ToLower(member), searchQuery) {
@@ -58,14 +41,14 @@ func GetSearchSuggestion(res http.ResponseWriter, searchQuery string) (SearchSug
 
 	data, err := utils.GetLocations(res)
 	if err {
-		return SearchSuggestion{}, true
+		return models.SearchSuggestion{}, true
 	}
 	var _data models.LocationModel
 	_err := json.Unmarshal(data, &_data)
 	if _err != nil {
 		utils.RenderPage("500", nil, res)
 		log.Println("❌ Internal Server Error ", _err)
-		return SearchSuggestion{}, true
+		return models.SearchSuggestion{}, true
 	}
 
 	locations := _data.Index
@@ -73,19 +56,19 @@ func GetSearchSuggestion(res http.ResponseWriter, searchQuery string) (SearchSug
 		for _, _location := range location.Locations {
 			__location := strings.Split(_location, "-")
 			if len(__location) == 2 {
-				city := strings.Title(strings.ReplaceAll(__location[0], "_", " "))
-				country := strings.Title(strings.ReplaceAll(__location[1], "_", " "))
-
-				if strings.Contains(searchQuery, strings.ToLower(city)) || strings.Contains(strings.ToLower(city), searchQuery) {
-					Locations = append(Locations, fmt.Sprintf("%s, %s@%d", city, country, location.Id))
-				} else if strings.Contains(searchQuery, strings.ToLower(country)) || strings.Contains(strings.ToLower(country), searchQuery) {
-					Locations = append(Locations, fmt.Sprintf("%s, %s@%d", city, country, location.Id))
+				city := strings.ToLower(strings.ReplaceAll(__location[0], "_", " "))
+				country := strings.ToLower(strings.ReplaceAll(__location[1], "_", " "))
+				if strings.Contains(strings.ToLower(city), searchQuery) {
+					Locations = append(Locations, fmt.Sprintf("%s@%d", city, location.Id))
+				}
+				if strings.Contains(strings.ToLower(country), searchQuery) {
+					Locations = append(Locations, fmt.Sprintf("%s@%d", country, location.Id))
 				}
 			}
 		}
 	}
 
-	response := SearchSuggestion{
+	response := models.SearchSuggestion{
 		Names,
 		Members,
 		Locations,
@@ -95,18 +78,18 @@ func GetSearchSuggestion(res http.ResponseWriter, searchQuery string) (SearchSug
 	return response, false
 }
 
-func GetSearchResult(res http.ResponseWriter, searchQuery string) (map[string]SearchResult, bool) {
-	response := map[string]SearchResult{}
+func GetSearchResult(res http.ResponseWriter, searchQuery string) (map[string]models.SearchResult, bool) {
+	response := map[string]models.SearchResult{}
 
 	artists, err := utils.GetArtistList(res)
 	if err {
-		return map[string]SearchResult{}, true
+		return map[string]models.SearchResult{}, true
 	}
 
 	for _, artist := range artists {
 		if strings.Contains(strings.ToLower(artist.Name), searchQuery) {
 			if _, exist := response[artist.Name]; exist {
-				response[artist.Name] = SearchResult{
+				response[artist.Name] = models.SearchResult{
 					Names:         response[artist.Name].Names + 1,
 					Members:       response[artist.Name].Members,
 					Locations:     response[artist.Name].Locations,
@@ -115,7 +98,7 @@ func GetSearchResult(res http.ResponseWriter, searchQuery string) (map[string]Se
 					Artist:        artist,
 				}
 			} else {
-				response[artist.Name] = SearchResult{
+				response[artist.Name] = models.SearchResult{
 					Names:  1,
 					Artist: artist,
 				}
@@ -123,7 +106,7 @@ func GetSearchResult(res http.ResponseWriter, searchQuery string) (map[string]Se
 		}
 		if strings.Contains(strings.ToLower(artist.FirstAlbum), searchQuery) {
 			if _, exist := response[artist.Name]; exist {
-				response[artist.Name] = SearchResult{
+				response[artist.Name] = models.SearchResult{
 					FirstAlbums:   response[artist.Name].FirstAlbums + 1,
 					Names:         response[artist.Name].Names,
 					Members:       response[artist.Name].Members,
@@ -132,7 +115,7 @@ func GetSearchResult(res http.ResponseWriter, searchQuery string) (map[string]Se
 					Artist:        artist,
 				}
 			} else {
-				response[artist.Name] = SearchResult{
+				response[artist.Name] = models.SearchResult{
 					FirstAlbums: 1,
 					Artist:      artist,
 				}
@@ -140,7 +123,7 @@ func GetSearchResult(res http.ResponseWriter, searchQuery string) (map[string]Se
 		}
 		if fmt.Sprintf("%d", artist.CreationDate) == searchQuery {
 			if _, exist := response[artist.Name]; exist {
-				response[artist.Name] = SearchResult{
+				response[artist.Name] = models.SearchResult{
 					CreationDates: response[artist.Name].CreationDates + 1,
 					Names:         response[artist.Name].Names,
 					Members:       response[artist.Name].Members,
@@ -149,7 +132,7 @@ func GetSearchResult(res http.ResponseWriter, searchQuery string) (map[string]Se
 					Artist:        artist,
 				}
 			} else {
-				response[artist.Name] = SearchResult{
+				response[artist.Name] = models.SearchResult{
 					CreationDates: 1,
 					Artist:        artist,
 				}
@@ -158,7 +141,7 @@ func GetSearchResult(res http.ResponseWriter, searchQuery string) (map[string]Se
 		for _, member := range artist.Members {
 			if strings.Contains(strings.ToLower(member), searchQuery) {
 				if _, exist := response[artist.Name]; exist {
-					response[artist.Name] = SearchResult{
+					response[artist.Name] = models.SearchResult{
 						Members:       response[artist.Name].Members + 1,
 						Names:         response[artist.Name].Names,
 						Locations:     response[artist.Name].Locations,
@@ -167,7 +150,7 @@ func GetSearchResult(res http.ResponseWriter, searchQuery string) (map[string]Se
 						Artist:        artist,
 					}
 				} else {
-					response[artist.Name] = SearchResult{
+					response[artist.Name] = models.SearchResult{
 						Members: 1,
 						Artist:  artist,
 					}
@@ -178,14 +161,14 @@ func GetSearchResult(res http.ResponseWriter, searchQuery string) (map[string]Se
 
 	data, err := utils.GetLocations(res)
 	if err {
-		return map[string]SearchResult{}, true
+		return map[string]models.SearchResult{}, true
 	}
 	var _data models.LocationModel
 	_err := json.Unmarshal(data, &_data)
 	if _err != nil {
 		utils.RenderPage("500", nil, res)
 		log.Println("❌ Internal Server Error ", _err)
-		return map[string]SearchResult{}, true
+		return map[string]models.SearchResult{}, true
 	}
 
 	locations := _data.Index
@@ -195,10 +178,10 @@ func GetSearchResult(res http.ResponseWriter, searchQuery string) (map[string]Se
 			if len(__location) == 2 {
 				city := strings.ToLower(strings.ReplaceAll(__location[0], "_", " "))
 				country := strings.ToLower(strings.ReplaceAll(__location[1], "_", " "))
-				if strings.Contains(searchQuery, strings.ToLower(city)) || strings.Contains(strings.ToLower(city), searchQuery) {
+				if strings.Contains(strings.ToLower(city), searchQuery) {
 					artist, _ := utils.GetArtist(location.Id, res)
 					if _, exist := response[artist.Name]; exist {
-						response[artist.Name] = SearchResult{
+						response[artist.Name] = models.SearchResult{
 							Locations:     response[artist.Name].Locations + 1,
 							Names:         response[artist.Name].Names,
 							Members:       response[artist.Name].Members,
@@ -207,26 +190,28 @@ func GetSearchResult(res http.ResponseWriter, searchQuery string) (map[string]Se
 							Artist:        artist,
 						}
 					} else {
-						response[artist.Name] = SearchResult{
+						response[artist.Name] = models.SearchResult{
 							Locations: 1,
 							Artist:    artist,
 						}
 					}
-				} else if strings.Contains(searchQuery, strings.ToLower(country)) || strings.Contains(strings.ToLower(country), searchQuery) {
-					artist, _ := utils.GetArtist(location.Id, res)
-					if _, exist := response[artist.Name]; exist {
-						response[artist.Name] = SearchResult{
-							Locations:     response[artist.Name].Locations + 1,
-							Names:         response[artist.Name].Names,
-							Members:       response[artist.Name].Members,
-							FirstAlbums:   response[artist.Name].FirstAlbums,
-							CreationDates: response[artist.Name].CreationDates,
-							Artist:        artist,
-						}
-					} else {
-						response[artist.Name] = SearchResult{
-							Locations: 1,
-							Artist:    artist,
+				} else {
+					if strings.Contains(strings.ToLower(country), searchQuery) {
+						artist, _ := utils.GetArtist(location.Id, res)
+						if _, exist := response[artist.Name]; exist {
+							response[artist.Name] = models.SearchResult{
+								Locations:     response[artist.Name].Locations + 1,
+								Names:         response[artist.Name].Names,
+								Members:       response[artist.Name].Members,
+								FirstAlbums:   response[artist.Name].FirstAlbums,
+								CreationDates: response[artist.Name].CreationDates,
+								Artist:        artist,
+							}
+						} else {
+							response[artist.Name] = models.SearchResult{
+								Locations: 1,
+								Artist:    artist,
+							}
 						}
 					}
 				}

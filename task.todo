@@ -1,15 +1,7 @@
-+   [ ] Search Suggestion
-    +   [ ] Create `/suggestion` endpoint
-        +   [ ] Create SearchSuggestion Model
-        +   [ ] Get Names Suggestion
-        +   [ ] Get Members Suggestion
-        +   [ ] Get Locations Suggestion
-        +   [ ] Get FirstAlbums Suggestion
-        +   [ ] Get CreationDates Suggestion
-    +   [ ] Create input event handler
-+   [ ] Search Result
-    +   [ ] Create `search` endpoint
-        +   [ ] Create SearchResult Model
-        +   [ ] Get artist that matches the search input
-        +   [ ] Redirect to artist page if there is an unique search result
-    +   [ ] Create search page
++   [x] filter by number of members - checkbox - bakseck
++   [x] filter by locations of concerts - select - serignmbaye
+
++   [x] filter by creation date - double range - bakseck
++   [x] filter by first album date - double range - serignmbaye
+
++   [ ] add UI (checkbox, range...)

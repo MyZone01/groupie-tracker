@@ -1,0 +1,30 @@
+{{define "title"}} | Map {{end}}
+
+{{define "artist"}} {{end}}
+
+{{ define "content" }}
+
+<main>
+    <div id="map"></div>
+</main>
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+<script>
+    var map = L.map('map');
+    coordinates = []
+    {{ range . }}
+        coordinates.push([{{ .Latitude }}, {{ .Longitude }}])
+        marker = L.marker([{{ .Latitude }}, {{ .Longitude }}])
+        .addTo(map);
+        marker.bindPopup("{{.Name}}");
+    {{ end }}
+
+    var polyline = L.polyline(coordinates, {color: 'blue'}).addTo(map);
+    map.fitBounds(polyline.getBounds());
+
+    L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png', {
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
+    }).addTo(map);
+</script>
+
+{{ end }}

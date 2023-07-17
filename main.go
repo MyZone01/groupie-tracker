@@ -17,8 +17,10 @@ func main() {
 
 	ADDRESS := os.Getenv("ADDRESS")
 
-	fs := http.FileServer(http.Dir("assets"))
-	http.Handle("/assets/", http.StripPrefix("/assets/", fs))
+	fsAssets := http.FileServer(http.Dir("assets"))
+	http.Handle("/assets/", http.StripPrefix("/assets/", fsAssets))
+	fsScripts := http.FileServer(http.Dir("scripts"))
+	http.Handle("/scripts/", http.StripPrefix("/scripts/", fsScripts))
 
 	http.HandleFunc("/", handlers.Index)
 	http.HandleFunc("/artists", handlers.ArtistList)
@@ -26,6 +28,7 @@ func main() {
 	http.HandleFunc("/events", handlers.DatesList)
 	http.HandleFunc("/suggestion", handlers.Suggestion)
 	http.HandleFunc("/search", handlers.Search)
+	http.HandleFunc("/map/", handlers.Map)
 
 	log.Println("Server started and listening on", PORT)
 	log.Println(ADDRESS + PORT)

@@ -1,13 +1,100 @@
 {{define "title"}} | All artists{{end}}
 
-{{define "artist"}} {{end}}
+{{define "artist"}}
+</nav>
+<form class="filter" action="/artists" method="get">
+    <style>
+        form {
+            display: flex;
+            width: 70%;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        select {
+            width: 150px;
+        }
+    </style>
+    <select name="locations">
+        <option value="">Select a location</option>
+        <option value="">{{ .CurrentFilter.Location }}</option>
+        {{range .Locations}}
+        {{if eq . $.CurrentFilter.Location }}
+        <option value="{{.}}" selected>{{.}}</option>
+        {{else}}
+        <option value="{{.}}">{{.}}</option>
+        {{end}}
+        {{end}}
+    </select>
+    <div class="row w">
+        <style>
+            .row.w {
+                width: auto;
+            }
+
+            .check label {
+                width: 18px;
+                height: 18px;
+                font-size: 1.1em;
+                border-radius: .25rem;
+                font-weight: bold;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background-color: lightgray;
+                cursor: pointer;
+            }
+
+            .check input[type="checkbox"]:checked+label {
+                color: white;
+                background-color: #3264fe;
+            }
+        </style>
+        {{range $key, $value := .NumberMembers}}
+        {{if ne $key 0 }}
+        {{if eq $value true }}
+        <div class="check">
+            <input type="checkbox" name="numberMembers" id="checkb-{{$key}}" checked style="display: none;" value="{{$key}}" />
+            <label for="checkb-{{$key}}">{{$key}}</label>
+        </div>
+        {{else}}
+        <div class="check">
+            <input type="checkbox" name="numberMembers" id="checkb-{{$key}}" style="display: none;" value="{{$key}}" />
+            <label for="checkb-{{$key}}">{{$key}}</label>
+        </div>
+        {{end}}
+        {{end}}
+        {{end}}
+    </div>
+    {{if or (eq .CurrentFilter.MinCreationDate 0) (eq .CurrentFilter.MaxCreationDate 0) }}
+    <date-range-slider name="creation-date" min-value="1950" max-value="2023"></date-range-slider>
+    {{else}}
+    <date-range-slider name="creation-date" min-value="{{.CurrentFilter.MinCreationDate}}"
+        max-value="{{.CurrentFilter.MaxCreationDate}}"></date-range-slider>
+    {{end}}
+    <input type="hidden" id="minCreationDate" name="minCreationDate" value="1950">
+    <input type="hidden" id="maxCreationDate" name="maxCreationDate" value="2023">
+    {{if or (eq .CurrentFilter.MinFirstAlbum 0) (eq .CurrentFilter.MaxFirstAlbum 0) }}
+    <date-range-slider name="first-album" min-value="1950" max-value="2023"></date-range-slider>
+    {{else}}
+    <date-range-slider name="first-album" min-value="{{.CurrentFilter.MinFirstAlbum}}"
+        max-value="{{.CurrentFilter.MaxFirstAlbum}}"></date-range-slider>
+    {{end}}
+    <input type="hidden" id="minFirstAlbum" name="minFirstAlbum" value="1950">
+    <input type="hidden" id="maxFirstAlbum" name="maxFirstAlbum" value="2023">
+    <button class="icon send" onclick="submitForm()">
+        <i></i>
+    </button>
+</form>
+<nav></nav>
+{{end}}
 
 {{ define "content" }}
 
 <main>
     <h1>GROUPIE</h1>
     <div class="grid">
-        {{ range . }}
+        {{ range .Artists }}
         <a href="/artist/{{ .Id }}">
             <article class="glass">
                 <img src="{{ .Image }}" alt="artist" />
@@ -17,6 +104,42 @@
         {{ end }}
     </div>
 </main>
+<script defer src="/scripts/date-range.js"></script>
+<script defer>
+    function debounce(func, wait) {
+        var timeout;
 
+        return function executedFunction() {
+            var context = this;
+            var args = arguments;
+
+            var later = function () {
+                timeout = null;
+                func.apply(context, args);
+            };
+
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    };
+
+    const form = document.querySelector('.filter');
+    const sliders = document.querySelectorAll('date-range-slider');
+
+    sliders.forEach((slider) => {
+        slider.addEventListener('change', (e) => {
+            name = slider.name.split('-')
+                .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                .join('');
+            document.getElementById(`min${name}`).value = e.detail.minValue;
+            document.getElementById(`max${name}`).value = e.detail.maxValue;
+            // submitForm()
+        });
+    });
+
+    var submitForm = debounce(() => {
+        form.submit();
+    }, 250);
+</script>
 
 {{ end }}
